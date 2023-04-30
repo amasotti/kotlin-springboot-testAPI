@@ -6,6 +6,7 @@ plugins {
     id("org.graalvm.buildtools.native") version "0.9.20"
     kotlin("jvm") version "1.8.20"
     kotlin("plugin.spring") version "1.8.20"
+    jacoco
 }
 
 group = "learning.antonio"
@@ -33,6 +34,34 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+// Tests settings
+
 tasks.withType<Test> {
     useJUnitPlatform()
+    finalizedBy("jacocoTestReport")
+}
+
+tasks.test {
+    finalizedBy("jacocoTestReport")
+}
+
+
+tasks.jacocoTestReport {
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        csv.required.set(false)
+    }
+}
+
+
+val testCoverage by tasks.registering {
+    group = "verification"
+    description = "Runs the unit tests with coverage"
+
+    dependsOn(":test",
+        ":jacocoTestReport"
+        )
+
+    tasks["jacocoTestReport"].mustRunAfter(tasks["test"])
 }
