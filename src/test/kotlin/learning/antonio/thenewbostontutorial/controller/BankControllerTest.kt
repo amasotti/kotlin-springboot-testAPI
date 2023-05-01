@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.*
 
 @SpringBootTest
@@ -102,7 +103,7 @@ internal class BankControllerTest @Autowired constructor(
                     status { isCreated() }
                     content { contentType("application/json") }
                     jsonPath("$.accountNumber") { value("1234") }
-            }
+                }
 
 
         }
@@ -149,7 +150,7 @@ internal class BankControllerTest @Autowired constructor(
                         contentType("application/json")
                         json(objectMapper.writeValueAsString(updatedBank))
                     }
-            }
+                }
         }
 
         @Test
@@ -177,14 +178,11 @@ internal class BankControllerTest @Autowired constructor(
     inner class DeleteBank {
 
         @Test
+        @DirtiesContext // This annotation is needed to reset the mocked data after the test
         fun `should delete an existing bank`() {
 
-            // First add another bank, in order not to interfere with other tests
-            val newBank = Bank("test", 1234567, 5.0, 3)
-            bankService.addBank(newBank)
-
             // given
-            val accountNumber = 1234567
+            val accountNumber = 1
 
             val deleteReq = mockMvc.delete("/api/banks/$accountNumber")
 
