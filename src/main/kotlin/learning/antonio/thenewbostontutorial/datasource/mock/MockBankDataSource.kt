@@ -15,9 +15,9 @@ import org.springframework.stereotype.Repository
 class MockBankDataSource: BankDataSource {
 
     val banks = listOf(
-        Bank("Mockito", 1, 3.14, 1),
-        Bank("Mockito", 2, 2.85, 5),
-        Bank("Mockito", 3, 3.30, 2),
+        Bank("Sparkasse", 1, 3.14, 1),
+        Bank("Volksbank", 2, 2.85, 5),
+        Bank("DeutscheBank", 3, 3.30, 2),
     )
 
     override fun retrieveBanks(): Collection<Bank> = banks

@@ -55,10 +55,20 @@ internal class BankControllerTest {
         }
 
         @Test
+        fun `should return BAD REQUEST if the accountNumber cannot be converted to an Integer`() {
+
+            mockMvc.get("/api/banks/not_existing")
+                .andExpect {
+                    status { isBadRequest() }
+                }
+
+        }
+
+
+        @Test
         fun `should return NOT FOUND if the accountNumber does not exist`() {
 
-            mockMvc.get("/api/banks/99999")
-                .andDo { print() }
+            mockMvc.get("/api/banks/999999999")
                 .andExpect {
                     status { isNotFound() }
                 }
