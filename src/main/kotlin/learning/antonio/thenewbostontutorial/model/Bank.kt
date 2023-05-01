@@ -18,6 +18,6 @@ package learning.antonio.thenewbostontutorial.model
 data class Bank(
     val officialName: String,
     val accountNumber: Int,
-    private val trust: Double,
-    private val transactionFee: Int,
+    val trust: Double,
+    val transactionFee: Int,
 )

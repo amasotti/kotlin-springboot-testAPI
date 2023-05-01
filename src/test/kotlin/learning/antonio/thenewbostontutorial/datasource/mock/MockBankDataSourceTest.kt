@@ -11,7 +11,7 @@ internal class MockBankDataSourceTest {
     @Test
     fun `should provide a collection of banks`() {
         // when
-        val banks = mockBankDataSource.getBanks()
+        val banks = mockBankDataSource.retrieveBanks()
 
         // thenfu
         assertNotEquals(0, banks.size)
@@ -22,7 +22,7 @@ internal class MockBankDataSourceTest {
     fun `should provide some mock data`() {
     
     // given 
-    val banks = mockBankDataSource.getBanks()
+    val banks = mockBankDataSource.retrieveBanks()
 
     //assert
     Assertions.assertThat(banks).allMatch { it.accountNumber > 0 }
