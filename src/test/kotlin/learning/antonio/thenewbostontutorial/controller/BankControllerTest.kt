@@ -20,10 +20,22 @@ internal class BankControllerTest {
         mockMvc.get("/api/banks")
             .andDo { print() }
             .andExpect {
-                status { isOk() }
+                status { is2xxSuccessful() }
                 content { contentType("application/json") }
                 jsonPath("$[0].accountNumber") { value("1") }
             }
+    }
+
+    @Test
+    fun `should get one bank by accountNumber`() {
+
+        mockMvc.get("/api/banks/1")
+            .andExpect {
+                status { is2xxSuccessful() }
+                content { contentType("application/json") }
+                jsonPath("$.trust") { value("3.14") }
+            }
+
     }
 
 }

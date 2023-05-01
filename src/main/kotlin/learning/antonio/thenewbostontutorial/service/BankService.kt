@@ -14,5 +14,6 @@ class BankService(private val dataSource: BankDataSource) {
 
     fun getBanks() = dataSource.retrieveBanks()
 
+    fun getBank(accountNumber: Int) = dataSource.retrieveBanks().firstOrNull() { it.accountNumber == accountNumber }
 
 }
