@@ -8,19 +8,26 @@ package learning.antonio.thenewbostontutorial.controller
 
 import learning.antonio.thenewbostontutorial.model.Bank
 import learning.antonio.thenewbostontutorial.service.BankService
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/banks")
 class BankController(private val bankService: BankService) {
 
+    @ExceptionHandler
+    fun handleNotFound(e: NoSuchElementException): ResponseEntity<String> =
+        ResponseEntity(
+            null,
+            org.springframework.http.HttpStatus.NOT_FOUND
+        )
+
     @GetMapping
     fun getBanks(): Collection<Bank> = bankService.getBanks()
 
     @GetMapping("/{accountNumber}")
-    fun getBank(@PathVariable accountNumber: Int): Bank? = bankService.getBank(accountNumber)
+    fun getBank(@PathVariable accountNumber: Int): Bank? {
+        return bankService.getBank(accountNumber)
+    }
 
 }
