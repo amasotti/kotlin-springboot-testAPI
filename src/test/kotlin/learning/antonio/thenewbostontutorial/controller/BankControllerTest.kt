@@ -2,6 +2,7 @@ package learning.antonio.thenewbostontutorial.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import learning.antonio.thenewbostontutorial.model.Bank
+import learning.antonio.thenewbostontutorial.service.BankService
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -16,7 +17,8 @@ import org.springframework.test.web.servlet.*
 @AutoConfigureMockMvc
 internal class BankControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
-    val objectMapper: ObjectMapper
+    val objectMapper: ObjectMapper,
+    val bankService: BankService
 ) {
 
     @Nested
@@ -174,19 +176,24 @@ internal class BankControllerTest @Autowired constructor(
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class DeleteBank {
 
-//        @Test
-//        fun `should delete an existing bank`() {
-//            // given
-//            val accountNumber = 1
-//
-//            val deleteReq = mockMvc.delete("/api/banks/$accountNumber")
-//
-//            deleteReq
-//                .andDo { print() }
-//                .andExpect {
-//                    status { isNoContent() }
-//                }
-//        }
+        @Test
+        fun `should delete an existing bank`() {
+
+            // First add another bank, in order not to interfere with other tests
+            val newBank = Bank("test", 1234567, 5.0, 3)
+            bankService.addBank(newBank)
+
+            // given
+            val accountNumber = 1234567
+
+            val deleteReq = mockMvc.delete("/api/banks/$accountNumber")
+
+            deleteReq
+                .andDo { print() }
+                .andExpect {
+                    status { isNoContent() }
+                }
+        }
 
         @Test
         fun `should return NotFound if no bank with given accountNumber exists`() {

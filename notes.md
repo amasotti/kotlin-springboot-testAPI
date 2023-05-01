@@ -1,3 +1,6 @@
+
+# Mocking with mockk
+
 ## Standard mocking with mockk
 
 ~~~kotlin
@@ -47,3 +50,62 @@ internal class BankServiceTest {
     }
 }
 ~~~
+
+# Autowiring
+
+## Autowiring single beans
+
+~~~kotlin
+@SpringBootTest
+@AutoConfigureMockMvc
+internal class BankControllerTest {
+
+@Autowired
+private val mockMvc: MockMvc
+
+@Autowired
+private val objectMapper: ObjectMapper
+
+// Code omitted for brevity
+}
+~~~
+
+Here we are autowiring the `MockMvc` and `ObjectMapper` beans into our test class, each
+of which independently.
+
+
+## Autowiring single beans in the constructor directly
+
+~~~kotlin
+@SpringBootTest
+@AutoConfigureMockMvc
+internal class BankControllerTest(
+    @Autowired val mockMvc: MockMvc,
+    @Autowired val objectMapper: ObjectMapper
+) {
+
+// Code omitted for brevity
+}
+~~~
+
+Here we are autowiring the `MockMvc` and `ObjectMapper` beans into our test class, each
+of which independently, but this time we are autowiring them directly into the constructor
+of the test class.
+
+
+## Autowiring all the beans in the constructor
+
+~~~kotlin
+@SpringBootTest
+@AutoConfigureMockMvc
+internal class BankControllerTest @Autowired constructor(
+    val mockMvc: MockMvc,
+    val objectMapper: ObjectMapper
+) {
+
+// Code omitted for brevity
+}
+
+~~~
+
+Here we are autowiring all the beans into our test class.
