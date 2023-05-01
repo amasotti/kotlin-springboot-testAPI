@@ -8,6 +8,9 @@ Versions used here:
 - Gradle 7.6.1
 - Java 17
 
+### Architecture
+
+- see [Architecture](./architecture.drawio)
 
 ## Additional learning resources
 - [Bikeleasing internal Notion Wiki](https://www.notion.so/bikeleasing-dev/Kotlin-a159994a8f904d2987f26acc0037fb19?pvs=4)
