@@ -23,12 +23,26 @@ class MockBankDataSource: BankDataSource {
     override fun retrieveBanks(): Collection<Bank> = banks
 
     override fun addBank(bank: Bank): Bank {
-        checkAccountNumber(bank.accountNumber)
+        failIfAccountNumberExists(bank.accountNumber)
         banks.add(bank)
         return bank
     }
 
-    private fun checkAccountNumber(accountNumber: Int) {
+    override fun updateBank(bank: Bank): Bank {
+        val currentBank = banks.firstOrNull { it.accountNumber == bank.accountNumber }
+            ?: throw NoSuchElementException("Bank with account number ${bank.accountNumber} not found")
+        banks.remove(currentBank)
+        banks.add(bank)
+        return bank
+    }
+
+    override fun deleteBank(accountNumber: Int): Unit {
+        val currentBank = banks.firstOrNull { it.accountNumber == accountNumber }
+            ?: throw NoSuchElementException("Bank with account number $accountNumber not found")
+        banks.remove(currentBank)
+    }
+
+    private fun failIfAccountNumberExists(accountNumber: Int) {
         if (banks.any { it.accountNumber == accountNumber }) {
             throw IllegalArgumentException("Bank with account number $accountNumber already exists")
         }

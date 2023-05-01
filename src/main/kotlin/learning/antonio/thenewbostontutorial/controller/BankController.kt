@@ -35,7 +35,6 @@ class BankController(private val bankService: BankService) {
     }
 
 
-
     @GetMapping
     fun getBanks(): Collection<Bank> = bankService.getBanks()
 
@@ -45,4 +44,12 @@ class BankController(private val bankService: BankService) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun addBank(@RequestBody bank: Bank): Bank = bankService.addBank(bank)
+
+    @PatchMapping
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun updateBank(@RequestBody bank: Bank): Bank = bankService.updateBank(bank)
+
+    @DeleteMapping("/{accountNumber}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteBank(@PathVariable accountNumber: Int): Unit = bankService.deleteBank(accountNumber)
 }
