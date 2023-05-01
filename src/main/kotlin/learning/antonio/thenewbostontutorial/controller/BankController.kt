@@ -8,6 +8,7 @@ package learning.antonio.thenewbostontutorial.controller
 
 import learning.antonio.thenewbostontutorial.model.Bank
 import learning.antonio.thenewbostontutorial.service.BankService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
@@ -20,19 +21,28 @@ class BankController(private val bankService: BankService) {
     fun handleNotFound(e: NoSuchElementException): ResponseEntity<String> =
         ResponseEntity(
             e.message,
-            org.springframework.http.HttpStatus.NOT_FOUND
+            HttpStatus.NOT_FOUND
         )
 
     @ExceptionHandler
-    fun handleBadRequest(e: MethodArgumentTypeMismatchException): ResponseEntity<String> =
-        ResponseEntity(
-            "Bad Request ".plus(e.message),
-            org.springframework.http.HttpStatus.BAD_REQUEST
-        )
+    fun handleException(e: Exception): ResponseEntity<String> {
+        val errorMessage = when (e) {
+            is MethodArgumentTypeMismatchException -> "Bad Request " + e.message
+            is IllegalArgumentException -> e.message
+            else -> "Something went wrong"
+        }
+        return ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST)
+    }
+
+
 
     @GetMapping
     fun getBanks(): Collection<Bank> = bankService.getBanks()
 
     @GetMapping("/{accountNumber}")
     fun getBank(@PathVariable accountNumber: Int): Bank? = bankService.getBank(accountNumber)
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    fun addBank(@RequestBody bank: Bank): Bank = bankService.addBank(bank)
 }

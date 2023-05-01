@@ -19,5 +19,6 @@ class BankService(private val dataSource: BankDataSource) {
         dataSource.retrieveBanks().firstOrNull() { it.accountNumber == accountNumber }
             ?: throw NoSuchElementException("Could not find a bank with account number $accountNumber")
 
+    fun addBank(bank: Bank): Bank = dataSource.addBank(bank)
 
 }

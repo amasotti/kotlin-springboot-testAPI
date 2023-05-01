@@ -14,11 +14,23 @@ import org.springframework.stereotype.Repository
 @Repository
 class MockBankDataSource: BankDataSource {
 
-    val banks = listOf(
+    val banks = mutableListOf(
         Bank("Sparkasse", 1, 3.14, 1),
         Bank("Volksbank", 2, 2.85, 5),
         Bank("DeutscheBank", 3, 3.30, 2),
     )
 
     override fun retrieveBanks(): Collection<Bank> = banks
+
+    override fun addBank(bank: Bank): Bank {
+        checkAccountNumber(bank.accountNumber)
+        banks.add(bank)
+        return bank
+    }
+
+    private fun checkAccountNumber(accountNumber: Int) {
+        if (banks.any { it.accountNumber == accountNumber }) {
+            throw IllegalArgumentException("Bank with account number $accountNumber already exists")
+        }
+    }
 }
